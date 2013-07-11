@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+
+
+
+		<title>Set</title>
+
+
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+
+	<style>	
+
+		#break{
+
+
+
+			clear:left;
+
+
+
+		}
+
+
+
+		#board {
+
+			background-color: black;
+
+			height: 900px;
+
+			width: 1850px;
+
+		
+
+		}
+
+
+		#scorebox{
+
+			height: 50px;
+			width: 200px;
+			text-align: center;
+			position: relative;
+			background-color: white;
+			border: 5px green solid;
+			border-radius: 8px;
+			margin: 5px;
+			left: 790px;
+			bottom: 35px;
+
+		}
+
+		.cardshell {
+
+			width: 200px;
+
+			background-color: white;
+
+			height: 350px;
+
+			margin: 40px;
+
+			float: left;
+
+			border-radius:20px;
+
+			border:10px black solid;
+
+			cursor:pointer;}
+
+		.cardshell:hover{
+
+			border: 10px yellow solid;
+
+		}
+
+
+
+		.highlighted{
+
+
+
+			border: 10px red solid;
+
+
+
+		}
+
+		
+
+
+
+		.purple {
+
+   			content: "";
+
+   			display: block;
+
+   			width:50px;
+
+   			height :50px;
+
+   			position:relative;
+
+   			top:40px;
+
+   			left:70px;
+
+   			background-color:purple;
+
+   			border: 5px purple solid;
+
+   			margin-bottom:40px;
+
+}
+
+
+
+		.red {
+
+   			content: "";
+
+   			display: block;
+
+   			width:50px;
+
+   			height :50px;
+
+   			position:relative;
+
+   			top:40px;
+
+   			left:70px;
+
+   			background-color:red;
+
+   			border: 5px red solid;
+
+   			margin-bottom:40px;
+
+}
+
+
+
+		.green {
+
+   			content: "";
+
+   			display: block;
+
+   			width:50px;
+
+   			height :50px;
+
+   			position:relative;
+
+   			top:40px;
+
+   			left:70px;
+
+   			background-color:green;
+
+   			border: 5px green solid;
+
+   			margin-bottom: 40px;
+
+}
+
+
+
+		.full
+
+		{
+
+			opacity:1;
+
+		}
+
+
+
+		.translucent
+
+		{
+
+			background-image: url(stripes.png);
+
+		}
+
+
+
+		.transparent
+
+		{
+
+			background-color: white;
+
+		}
+
+
+
+
+
+		.square
+
+		{
+
+
+
+
+
+
+
+		}
+
+
+
+
+
+		.circle
+
+		{
+
+
+
+			border-radius: 50px;
+
+
+
+		}
+
+
+
+
+
+		.diamond
+
+		{
+
+			-webkit-transform:rotate(45deg);
+
+
+
+
+
+		}
+
+
+
+
+
+
+
+	</style>
+
+</head>
+
+<body>
+
+
+
+
+
+	<div id="board" style="">
+
+		<div class="cardshell" id= "shell0">
+
+			<div class="card" id ="card0"></div>
+
+		</div>
+
+
+
+		<div class="cardshell" id= "shell1">
+
+			<div class="card" id ="card1"></div>
+
+		</div>
+
+
+
+		<div class="cardshell" id= "shell2">
+
+			<div class="card" id ="card2"></div>
+
+		</div>
+
+
+
+		<div class="cardshell" id= "shell3">
+
+			<div class="card" id ="card3"></div>
+
+		</div>
+
+
+
+		<div class="cardshell" id= "shell4">
+
+			<div class="card" id ="card4"></div>
+
+		</div>
+
+
+
+		<div class="cardshell" id= "shell5">
+
+			<div class="card" id ="card5"></div>
+
+		</div>
+
+
+
+		
+
+			<div id = "break"></div>
+
+		
+
+
+
+		<div class="cardshell" id= "shell6">
+
+			<div class="card" id ="card6"></div>
+
+		</div>	
+
+
+
+		<div class="cardshell" id= "shell7">
+
+			<div class="card" id ="card7"></div>
+
+		</div>
+
+
+
+		<div class="cardshell" id= "shell8">
+
+			<div class="card" id ="card8"></div>
+
+		</div>
+
+
+
+		<div class="cardshell" id= "shell9">
+
+			<div class="card" id ="card9"></div>
+
+		</div>
+
+
+
+		<div class="cardshell" id= "shell10">
+
+			<div class="card" id ="card10"></div>
+
+		</div>
+
+
+
+		<div class="cardshell" id= "shell11">
+
+			<div class="card" id ="card11"></div>
+
+		</div>
+
+		
+		<div id="scorebox"></div>
+	
+	</div>
+
+
+
+
+
+
+
+
+
+<script>
+
+
+
+	$('#cards').css("border: 10px solid green");
+
+
+
+
+
+	$('someCard').data("shape", "oval");
+
+
+
+	var deck = [];
+
+
+	var score = 0;
+
+
+	// make deck array of cards
+
+	for (var color=0; color<3; color++) {
+
+
+
+		for (var shape=0; shape<3; shape++) {
+
+			
+
+			for (var fill=0; fill<3; fill++) {
+
+
+
+				for (var number=0; number<3; number++) {
+
+
+
+	
+
+					deck.push ({color: color, shape: shape, fill: fill, number: number, shell: false, selected: false})
+
+					
+
+				}	
+
+			}
+
+		}
+
+	}
+
+
+
+
+
+	var showing_cards = [];
+
+	var played_cards = [];
+
+
+
+	var CARDS_IN_PLAY = 12;
+
+
+
+
+
+
+
+	// move cards from deck[] array to cards_in_play[] array
+
+	for (var i=0;i<CARDS_IN_PLAY;i++) {
+
+		// choose a random number
+
+		var card_num = Math.floor (Math.random()*deck.length);
+
+	 	var card = deck[card_num];
+
+	 	card.shell = i;
+
+
+
+	 	// remove it from deck
+
+		deck.splice(card_num, 1);
+
+
+
+		// add it to cards_in_play
+
+		showing_cards.push(card);
+
+	}
+
+
+
+	//console.log(deck)
+
+	//console.log(showing_cards)
+
+
+
+
+
+
+
+/* different types:
+
+
+
+var a = "hello"
+
+var b = 12;
+
+var c = [1,2,3,4,5]
+
+var d = ["dog", "cat", "bat", "mouse"]
+
+var e = ["0,0,0,0", "0,0,0,1"]
+
+var o = {color: 0, shape: 0, fill: 0, number: 0}
+
+
+
+var c = o.color;
+
+
+
+*/
+
+
+
+//change number
+
+//HUSDFGGF JGADHSFGAHFSDGFDSGFSDGJFSASDJKGAHSDFSDGASDGASDFHGASDHAJDGHAFSGHFSHFJGSDJFGSDHFSGJDFSJFSJFHSAGDFADF ASGHDFASGDFASGHDFJASGJDFASGJDFASGHDFASGHDFASGHDFGHAFJ DGSFJKG SDJKFGSASFDGHASFDHASDFJAGDFGAHDF GHDFASD ASDASDASDADGHFASDGF DS ASDA  JASFDGJASHFASFDAGHFDGHASDDFHKSDFGuweqty eo iuywiqoeya uiosudyhsaiu yoYUIHAJKSGDHGQWEQYWEUIYASDUIOSHJKFGAJFHTADYUQWIETQWYEUIASTGDHFSGHASDFWETQTEDYUASDIGAHSFJKSDHFGASJDGLDFDKHSGHDKFGS GHJASDGS AUYSDTQWYEIASGHDGASKTGYWQETIWTEAJSKDGASHJKFG QYWETI
+
+
+
+/*var cards = {};
+
+
+
+for() {
+
+	cards[id] = {
+
+
+
+	}
+
+}
+
+
+
+var card = cards[id]
+
+
+
+if(!(selected.length == 3 || selected.indexOf(card) > -1) {
+
+	// put the card in
+
+}
+
+*/
+
+
+
+
+
+
+
+
+
+function numberchanger(card, number){
+
+	//console.log("numberchanger: ")
+
+	//console.log(card)
+
+
+
+	if (card.number==0)
+
+	{	//console.log("1");
+
+		$("div#card" + number).css("top", "140px");
+
+		
+
+	}
+
+	else if (card.number==1)
+
+	{	//console.log("2");
+
+
+		$("#shell" + number).append('<div class="card" id ="card' + number+'"></div>');
+
+		$("div#card" + number).css("top", "100px");
+
+
+	}
+
+	else if (card.number==2)
+
+	{	//console.log("3");
+
+		$("#shell" + number).append('<div class="card" id ="card' + number+'"></div>');
+
+		$("#shell" + number).append('<div class="card" id ="card' + number+'"></div>');
+
+		$("div#card" + number).css("bottom", "80px");
+
+
+
+	} else {
+
+		alert ("PROBLEM!!  unrecognized card data.")
+
+	}
+
+
+
+
+
+}
+
+
+
+
+
+
+
+//change color
+
+
+
+function colorchanger(card, place){
+
+	//console.log("colorchanger: ")
+
+	//console.log(card)
+
+
+
+	if (card.color==0)
+
+	{	//console.log("purple");
+
+		$("div#card" + place).addClass("purple");
+
+
+
+	
+
+}	else if (card.color==1)
+
+	{	//console.log("red");
+
+		$("div#card" + place).addClass("red");
+
+
+
+	}
+
+	else if (card.color==2)
+
+	{	//console.log("green");
+
+		$("div#card" + place).addClass("green");
+
+
+
+	} else {
+
+		alert ("PROBLEM!!  unrecognized card data.")
+
+	}
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+//change fill
+
+
+
+function fillchanger(card, place){
+
+	//console.log("fillchanger: ")
+
+	//console.log(card)
+
+
+
+	if (card.fill==0)
+
+	{	//console.log("full");
+
+		$("div#card" + place).addClass("full");
+
+
+
+	}
+
+	else if (card.fill==1)
+
+	{	//console.log("translucent");
+
+		$("div#card" + place).addClass("translucent");
+
+
+
+	}
+
+	else if (card.fill==2)
+
+	{	//console.log("transparent");
+
+		$("div#card" + place).addClass("transparent");
+
+
+
+	} else {
+
+		alert ("PROBLEM!!  unrecognized card data.")
+
+	}
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+//change shape
+
+
+
+function shapechanger(card, place){
+
+	//console.log("shapechanger: ")
+
+	//console.log(card)
+
+
+
+	if (card.shape==0)
+
+	{	//console.log("square");
+
+		$("div#card" + place).addClass("square");
+
+
+
+	}
+
+	else if (card.shape==1)
+
+	{	//console.log("circle");
+
+		$("div#card" + place).addClass("circle");
+
+
+
+	}
+
+	else if (card.shape==2)
+
+	{	//console.log("diamond");
+
+		$("div#card" + place).addClass("diamond");
+
+
+
+	} else {
+
+		alert ("PROBLEM!!  unrecognized card data.")
+
+	}
+
+
+
+
+
+}
+
+
+
+
+
+// this takes the cards in showing_cards[] and paints them on teh screen in the shells
+
+function call_changers() {
+
+	for (i=0;i<CARDS_IN_PLAY;i++) {
+
+		numberchanger(showing_cards[i], i)
+
+		colorchanger(showing_cards[i], i)
+
+		fillchanger(showing_cards[i], i)
+
+		shapechanger(showing_cards[i], i)
+
+	}
+
+}
+
+
+
+call_changers();
+
+
+
+var selected = [];
+
+
+
+
+
+
+
+
+
+
+$('.cardshell').on('click', function(e) {
+
+	var cardshell = $(this);
+
+	var whichshell = this.id.substring(5);
+
+	console.log('whichshell: '+whichshell);
+
+
+
+
+
+
+
+
+
+	var card;
+
+
+
+	// find the card that was just clicked on
+
+	for (var i=0; i<showing_cards.length; i++) {
+
+		if (showing_cards[i].shell == whichshell) {
+
+			card = showing_cards[i];
+
+		}
+
+	}
+
+
+
+	// it is already highlighted.  TURN IT OFF.
+
+	if (cardshell.hasClass('highlighted')) {
+
+		card.selected = false;
+
+		cardshell.removeClass('highlighted');
+
+	}
+
+
+
+	// TURN IT ON
+
+	else {
+
+		card.selected = true;
+
+		cardshell.addClass('highlighted');
+
+	}
+
+
+
+	console.log("AFTER: card is now "+card.selected);
+
+
+
+
+
+
+
+
+	// count the number of selected cards
+
+	var selected_cards_count = 0;
+
+	for (var i = 0; i < showing_cards.length; i++ ) {
+
+		if (showing_cards[i].selected == true) {
+
+			selected_cards_count ++;
+
+		}
+
+
+
+	}
+
+
+
+	console.log (selected_cards_count + " cards selected!")
+
+var set_of_cards = [];
+
+
+if (selected_cards_count == 3)
+
+	{
+
+		console.log("Full Count");
+
+
+
+		$("div").removeClass("highlighted");
+
+		for(i=0; i<showing_cards.length; i++){
+			if( showing_cards[i].selected == true){
+						set_of_cards.push(showing_cards[i]);
+						console.log(set_of_cards);
+
+
+			}
+
+
+
+		}
+		var cardsimilarities = 0;
+
+
+		// checks to see if the attribute is all equal or all different 
+
+		function check_attribute(attribute){
+			console.log(set_of_cards);
+			console.log(attribute);
+			if (set_of_cards[0][attribute]==set_of_cards[1][attribute] && set_of_cards[1][attribute] == set_of_cards[2][attribute]){
+					return true;
+
+			}
+			else if (set_of_cards[0][attribute]!=set_of_cards[1][attribute] && set_of_cards[1][attribute] != set_of_cards[2][attribute] && set_of_cards[0][attribute]!=set_of_cards[2][attribute]) {
+					return true;
+			}
+			
+			set_of_cards.splice(0,3);
+			call_changers();
+			console.log(set_of_cards);
+			console.log(showing_cards);
+			return false;
+		}
+
+
+		if (check_attribute('color') &&
+			check_attribute('fill') &&
+			check_attribute('shape') &&
+			check_attribute('number')) {
+			alert ('set!');
+
+			console.log(set_of_cards[0]);
+
+			for (var i=0;i<set_of_cards.length;i++) {
+				console.log("removing "+set_of_cards[i].shell)
+				$('#shell'+set_of_cards[i].shell).html('');
+			}
+
+			// remove these cards from showing cards
+			for (var i=0;i<showing_cards.length;i++) {
+				var c = showing_cards[i];
+				if (c.shell == set_of_cards[0].shell ||
+					c.shell == set_of_cards[1].shell ||
+					c.shell == set_of_cards[2].shell) {
+					showing_cards.splice(i,1);
+				}
+			}
+
+			call_changers();
+
+
+		}
+
+
+
+
+
+
+
+		set_of_cards.splice(0,3);
+	
+		for (var i=0; i<showing_cards.length; i++) {
+
+			
+
+				showing_cards[i].selected = false;
+
+			}
+
+
+
+		selected_cards_count = 0;
+
+		card.selected = false;
+
+
+		
+
+
+
+
+
+
+
+
+	}
+
+});
+
+
+
+</script>
+
+
+
+
+
+</body>
+
+</html>

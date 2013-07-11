@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Set</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<style>	
+	
+	#break{
+		clear:left;
+	}
+
+	#board {
+		background-color: black;
+		height: 900px;
+		width: 1850px;
+	}
+
+	.card{
+		width: 200px;
+		background-color: white;
+		height: 350px;
+		margin: 40px;
+		float: left;
+		border-radius:20px;
+		border:10px black solid;
+		cursor:pointer;
+	}
+
+	.card:hover{
+		border: 10px yellow solid;
+	}
+
+	.highlighted{
+		border: 10px red solid;
+	}
+
+	.purple{
+   		content: "";
+   		display: block;
+   		width:50px;
+   		height :50px;
+   		position:relative;
+   		top:40px;
+   		left:70px;
+   		background-color:purple;
+   		border: 5px purple solid;
+   		margin-bottom:40px;	
+   	}
+
+	.red{
+   		content: "";
+   		display: block;
+   		width:50px;
+   		height :50px;
+   		position:relative;
+   		top:40px;
+   		left:70px;
+  		background-color:red;
+   		border: 5px red solid;
+   		margin-bottom:40px;
+	}
+
+	.green{
+
+   		content: "";
+   		display: block;
+   		width:50px;
+   		height :50px;
+   		position:relative;
+   		top:40px;
+   		left:70px;
+   		background-color:green;
+   		border: 5px green solid;
+   		margin-bottom: 40px;
+   	}
+
+	.full{
+		opacity:1;
+	}
+
+	.striped{
+		background-image: url(stripes.png);
+	}
+
+	.transparent{
+		background-color: white;
+	}
+
+	.square{
+	}
+
+	.circle{
+		border-radius: 50px;
+	}
+
+	.diamond{
+		-webkit-transform:rotate(45deg);
+	}
+
+</style>
+</head>
+<body>
+
+<div id="board">
+	<div class="card" id ="card0"></div>
+	<div class="card" id ="card1"></div>
+	<div class="card" id ="card2"></div>
+	<div class="card" id ="card3"></div>
+	<div class="card" id ="card4"></div>
+	<div class="card" id ="card5"></div>
+	<div id="break"></div>
+	<div class="card" id ="card6"></div>
+	<div class="card" id ="card7"></div>
+	<div class="card" id ="card8"></div>
+	<div class="card" id ="card9"></div>
+	<div class="card" id ="card10"></div>
+	<div class="card" id ="card11"></div>
+</div>
+
+<script type="text/javascript">
+
+//create the deck
+
+var deck;
+
+
+function create_deck(){
+	deck = [];
+		for (var color=0; color<3; color++) {
+			for (var shape=0; shape<3; shape++) {
+				for (var fill=0; fill<3; fill++) {
+					for (var number=0; number<3; number++) {
+						deck.push ({color: color, shape: shape, fill: fill, number: number, selected: false})
+				}
+			}
+		}
+	}
+}
+
+create_deck();
+
+//cards_in_play are the visual cards
+var cards_in_play = [];
+//number_of_cards is the number of cards on the board
+var number_of_cards = 12;
+
+function pick_cards_in_play(){
+//creates the twelve cards in play
+	for (var i=0; i<number_of_cards; i++){
+		//below: creates a random number
+		var random_card = Math.floor (Math.random()*deck.length);
+		//below: draws a random card from the deck and stores it as variable card
+		var card = deck[random_card];
+		//below: gives the card an id to help distinguish it
+		card.id = i;
+		//below: remove it from the deck
+		deck.splice(random_card, 1);
+		//below: adds it to cards_in_play
+		cards_in_play.push(card);
+	}
+}
+
+pick_cards_in_play();
+console.log(cards_in_play);
+
+//adds shapes to the cards
+function numberchanger(card, number){
+	
+	if (card.number==0){
+		$("#card" + number).append('<div class="shape" id="shape'+number+'"><div>');
+		$('div#shape' + number).css("top", "140px");
+	}
+	
+	else if (card.number==1){
+		$("#card" + number).append('<div class="shape" id="shape'+number+'"><div>');
+		$("#card" + number).append('<div class="shape" id="shape'+number+'"><div>');
+		$('div#shape' + number).css("top", "100px");
+	}
+
+	else if (card.number==2){
+		$("#card" + number).append('<div class="shape" id="shape'+number+'"><div>');
+		$("#card" + number).append('<div class="shape" id="shape'+number+'"><div>');
+		$("#card" + number).append('<div class="shape" id="shape'+number+'"><div>');
+		$('div#shape' + number).css("bottom", "80px");	}
+
+	else{
+		alert ("PROBLEM!!  unrecognized card data.")
+	}
+}
+
+//adds colors to the cards
+function colorchanger(card, place){
+
+	if (card.color==0){
+		$("div#shape" + place).addClass("purple");
+	}
+	
+	else if (card.color==1){
+		$("div#shape" + place).addClass("red");
+	}
+
+	else if (card.color==2){
+		$("div#shape" + place).addClass("green");
+	}
+	
+	else{
+		alert ("PROBLEM!!  unrecognized card data.")
+	}
+}
+
+//changes the fill of the shapes
+function fillchanger(card, place){
+
+	if (card.fill==0){
+		$("div#shape" + place).addClass("full");
+	}
+
+	else if (card.fill==1){
+		$("div#shape" + place).addClass("striped");
+	}
+
+	else if (card.fill==2){
+		$("div#shape" + place).addClass("transparent");
+	}
+
+	else{
+		alert ("PROBLEM!!  unrecognized card data.")
+	}
+}
+
+//changes the shapes on the cards
+function shapechanger(card, place){
+
+	if (card.shape==0){
+		$("div#shape" + place).addClass("square");
+	}
+
+	else if (card.shape==1){
+		$("div#shape" + place).addClass("circle");
+	}
+
+	else if (card.shape==2){
+		$("div#shape" + place).addClass("diamond");
+	} 
+
+	else{
+		alert ("PROBLEM!!  unrecognized card data.")
+	}
+}
+
+//calls all of the card modification changers
+function call_changers() {
+	for (i=0;i<number_of_cards;i++) {
+		numberchanger(cards_in_play[i], i)
+		colorchanger(cards_in_play[i], i)
+		fillchanger(cards_in_play[i], i)
+		shapechanger(cards_in_play[i], i)
+		selected_cards_count = 0
+	}
+}
+
+call_changers();
+//All of the following deal with selecting cards
+var selected = [];
+
+$('.card').on('click', function(e) {
+	console.log("cards_in_play");
+	console.log(cards_in_play);
+
+	console.log("set_of_cards");
+	console.log(set_of_cards);
+
+
+	var card = $(this);
+	var whichcard = this.id;
+	// console.log('card: '+whichcard);
+	var card;
+
+	// find the card that was just clicked on
+	//stores the information in that card to var card
+	for (var i=0; i<cards_in_play.length; i++) {
+
+		if ("card"+cards_in_play[i].id == whichcard) {
+
+			card = cards_in_play[i];
+			// console.log(card)
+		}
+
+	}
+
+	// console.log("BEFORE: card is now "+card.selected);
+
+
+	// it is already highlighted.  TURN IT OFF.
+	if ($(this).hasClass('highlighted')) {
+
+		card.selected = false;
+		$(this).removeClass('highlighted');
+	}
+
+
+
+	// TURN IT ON
+
+	else {
+
+		card.selected = true;
+		$(this).addClass('highlighted');
+	}
+
+	// console.log("AFTER: card is now "+card.selected);
+
+	// count the number of selected cards
+	var selected_cards_count = 0;
+
+	for (var i = 0; i < cards_in_play.length; i++ ) {
+
+		if (cards_in_play[i].selected == true) {
+
+			selected_cards_count ++;
+		}
+	}
+
+
+
+	// console.log (selected_cards_count + " cards selected!")
+	//creates the variable to store the set of three cards
+	var set_of_cards = [];
+	//executes actions if three cards are selected
+	if (selected_cards_count == 3){
+
+		// console.log("Full Count");
+		$("div").removeClass("highlighted");
+		for(i=0; i<cards_in_play.length; i++){
+			if( cards_in_play[i].selected == true){
+						set_of_cards.push(cards_in_play[i]);
+						// console.log(set_of_cards);
+			}
+		}
+		//creates a variable to check if the card has 4 similaritites of differences
+		var cardsimilarities = 0;
+
+		function checkset(attribute){
+			// console.log(set_of_cards);
+			// console.log(attribute);
+			if (set_of_cards[0][attribute]==set_of_cards[1][attribute] && set_of_cards[1][attribute] == set_of_cards[2][attribute]){
+					cardsimilarities ++;
+				}
+			else if (set_of_cards[0][attribute]!=set_of_cards[1][attribute] && set_of_cards[1][attribute] != set_of_cards[2][attribute] && set_of_cards[0][attribute]!=set_of_cards[2][attribute])
+				{
+					cardsimilarities ++;
+				}
+			
+
+			
+		};
+		checkset('color');
+		checkset('fill');
+		checkset('shape');
+		checkset('number');
+		
+		if (cardsimilarities == 4){
+				alert("Set!");
+				for (var i=0; i<number_of_cards.length; i++) {
+
+				// console.log("hello");
+				if(cards_in_play[i][selected]==true){
+					// console.log("hello");				
+				}
+
+				cards_in_play[i].selected = false;
+				//console.log(set_of_cards);
+				}
+				
+				// console.log(cards_in_play);
+
+				for(i=2;i>=0;i--){
+					//creates a random number
+					var random_card = Math.floor (Math.random()*deck.length);
+					var new_card = deck[random_card];
+					//remove it from the deck
+					deck.splice(random_card, 1);
+					//gets rid of the cards
+					cards_in_play.splice(set_of_cards[i]["id"],1,new_card);
+				}
+
+			$("div.shape").remove();        	
+
+			call_changers();
+			// console.log(cards_in_play);
+				
+			}
+
+		
+		set_of_cards.splice(0,3);
+		selected_cards_count = 0;
+	}
+
+});
+
+</script>
+</body>
+</html>

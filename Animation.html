@@ -1,0 +1,74 @@
+<html>
+<head>
+	<title>Rotating Boxes</title>
+</head>
+
+<style type="text/css">
+
+.box{
+
+	height: 200px;
+	width: 200px;
+	position: relative;
+	-webkit-transition: all .25s ease-in-out;
+
+}
+
+
+.box:hover{
+
+	-webkit-transform: rotate(45deg);
+	transition:all .25s ease-in-out;
+	
+}
+
+#bluebox{
+	background-color: #4DB8FF;
+}
+
+#bluebox:hover{
+	background-color: #0033CC;
+}
+
+#redbox{
+	background-color: #CC0000;
+}
+
+#redbox:hover{
+	background-color: #8F0000;
+}
+
+#yellowbox{
+	background-color: #FFFF19;
+}
+
+#yellowbox:hover{
+	background-color: #CCCC14;
+}
+
+#text{
+	font-size: 32;
+	text-align: center;
+	
+}
+
+body{background-image: -webkit-radial-gradient(center, ellipse closest-corner, #FEFEFE 0%, #FAFAFA 100%);}
+
+</style>
+
+
+
+<body>
+
+	<div class="box" id="bluebox" style= "left:200px; top:200px;">
+		
+	</div>
+	<div class="box" id="redbox" style= "left:500px;">
+		
+	</div>
+	<div class="box" id= "yellowbox" style= "left:800px; top:-200px;">
+		
+	</div>
+
+</body>
+</html>
